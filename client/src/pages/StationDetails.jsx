@@ -11,6 +11,7 @@ function StationDetails() {
   const [selectedSlot, setSelectedSlot] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [station, setStation] = useState(null);
+  const [bookings, setBookings] = useState([]);
 
   const timeSlots = [
     "10:00 AM",
@@ -22,10 +23,33 @@ function StationDetails() {
   ];
 
   useEffect(() => {
-    API.get(`/stations/${id}`)
-      .then((res) => setStation(res.data))
+    API.get(`/api/stations/${id}`)
+      .then((res) => {
+        console.log("Station data:", res.data); // 👈 CHECK
+        setStation(res.data);
+      })
+      .catch((err) => {
+        console.log("Error:", err); // 👈 CHECK
+      });
+  }, [id]);
+
+  useEffect(() => {
+    API.get(`/bookings/station/${id}`)
+      .then((res) => {
+        setBookings(res.data);
+      })
       .catch((err) => console.log(err));
   }, [id]);
+
+  const bookedSlots = bookings.map((b) => b.timeSlot);
+
+  if (!station) {
+    return (
+      <div className="pt-28 text-center text-gray-500">
+        Loading station details...
+      </div>
+    );
+  }
 
   const percentage =
     (station.availableChargers / station.totalChargers) * 100;
@@ -125,18 +149,25 @@ function StationDetails() {
 
             {/* ⏱️ TIME SLOTS */}
             <div className="grid grid-cols-2 gap-3 mb-5">
-              {timeSlots.map((slot, index) => (
-                <button
-                  key={index}
-                  onClick={() => setSelectedSlot(slot)}
-                  className={`py-2 rounded-lg border text-sm transition ${selectedSlot === slot
-                    ? "bg-cyan-600 text-white border-cyan-600"
-                    : "border-gray-300 hover:border-cyan-500"
-                    }`}
-                >
-                  {slot}
-                </button>
-              ))}
+              {timeSlots.map((slot, index) => {
+                const isBooked = bookedSlots.includes(slot);
+
+                return (
+                  <button
+                    key={index}
+                    onClick={() => !isBooked && setSelectedSlot(slot)}
+                    disabled={isBooked}
+                    className={`py-2 rounded-lg border text-sm transition ${isBooked
+                      ? "bg-gray-200 text-gray-400 cursor-not-allowed"
+                      : selectedSlot === slot
+                        ? "bg-cyan-600 text-white border-cyan-600"
+                        : "border-gray-300 hover:border-cyan-500"
+                      }`}
+                  >
+                    {slot} {isBooked && "❌"}
+                  </button>
+                );
+              })}
             </div>
 
             {/* 🚀 BOOK BUTTON */}
@@ -189,13 +220,19 @@ function StationDetails() {
               <button
                 onClick={async () => {
                   try {
-                    await API.post("/bookings", {
+                    const res = await API.post("/bookings", {
                       stationId: station._id,
                       timeSlot: selectedSlot,
                     });
 
+                    setBookings((prev) => [...prev, res.data]);
+
+                    setSelectedSlot(null);
+
                     setShowModal(false);
+
                     toast.success("Booking Confirmed ⚡");
+
                   } catch (err) {
                     toast.error("Booking Failed ❌");
                   }

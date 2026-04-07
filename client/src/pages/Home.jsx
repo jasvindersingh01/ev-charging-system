@@ -1,9 +1,9 @@
 import Hero from "../components/sections/Hero";
+import MapView from "../components/sections/MapView";
 import StationCard from "../components/sections/StationCard";
 
 export default function Home() {
 
-  // 🔥 Dummy Data (for now)
   const stations = [
     {
       _id: "1",
@@ -31,6 +31,16 @@ export default function Home() {
   return (
     <>
       <Hero />
+
+        <section className="py-16 px-6 bg-gray-50">
+        <h2 className="text-2xl font-bold text-center mb-8">
+          Find Charging Stations Near You ⚡
+        </h2>
+
+        <div className="max-w-6xl mx-auto">
+          <MapView />
+        </div>
+      </section>
 
       <section className="bg-gray-50 py-16 px-6">
         <h2 className="text-2xl font-bold text-center mb-10">

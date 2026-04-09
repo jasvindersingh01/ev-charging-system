@@ -15,10 +15,10 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route
-            path="/dashboard"
+            path="/stations/:id"
             element={
               <ProtectedRoute>
-                <Dashboard />
+                <StationDetails />
               </ProtectedRoute>
             }
           />

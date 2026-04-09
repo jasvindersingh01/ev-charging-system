@@ -49,7 +49,10 @@ router.post("/login", async (req, res) => {
       { expiresIn: "7d" }
     );
 
-    res.json({ token });
+    res.json({
+      token,
+      name: user.name,
+    });
   } catch (err) {
     console.log(err);
     res.status(500).json({ error: err.message });

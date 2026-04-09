@@ -1,11 +1,23 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { Menu, X, Zap } from "lucide-react";
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import userIcon from "../../assets/icons/user_icon.png";
 
 function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [token, setToken] = useState(null);
+  const [userName, setUserName] = useState("");
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("token");
+    const storedName = localStorage.getItem("userName");
+
+    setToken(storedToken);
+    setUserName(storedName);
+  }, []);
 
   const navLinks = [
     { name: "Home", path: "/" },
@@ -17,7 +29,10 @@ function Navbar() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    window.location.href = "/login";
+    localStorage.removeItem("userName");
+
+    setToken(null);
+    navigate("/login");
   };
 
   return (
@@ -52,12 +67,32 @@ function Navbar() {
           ))}
 
           {/* CTA Button */}
-          <Link
-            to="/login"
-            className="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-semibold transition"
-          >
-            Login
-          </Link>
+      {token ? (
+  <div className="flex items-center gap-3 relative">
+    <img
+      src={userIcon}
+      alt="user"
+      className="w-8 h-8 rounded-full border"
+    />
+    <span className="text-white text-sm">
+      {userName}
+    </span>
+
+    <button
+      onClick={handleLogout}
+      className="ml-2 px-3 py-1 bg-red-500 text-white rounded"
+    >
+      Logout
+    </button>
+  </div>
+) : (
+  <Link
+    to="/login"
+    className="px-4 py-2 rounded-xl bg-cyan-500 hover:bg-cyan-400 text-black font-semibold"
+  >
+    Login
+  </Link>
+)}
         </div>
 
         {/* 📱 MOBILE MENU BUTTON */}
@@ -96,20 +131,51 @@ function Navbar() {
           ))}
 
           {token ? (
-            <button
-              onClick={handleLogout}
-              className="block text-center px-4 py-2 rounded-lg bg-red-500 text-white font-semibold"
+            <div
+              className="relative"
+              onMouseEnter={() => setOpen(true)}
+              onMouseLeave={() => setOpen(false)}
             >
-              Logout
-            </button>
+              {/* USER INFO */}
+              <div className="flex items-center gap-2 cursor-pointer">
+                <img
+                  src={userIcon}
+                  alt="user"
+                  className="w-8 h-8 rounded-full border"
+                />
+
+                <span className="text-sm font-medium text-gray-700">
+                  Hi, {userName}
+                </span>
+              </div>
+
+              {open && (
+                <div className="absolute right-0 mt-3 w-40 bg-white border rounded-xl shadow-lg p-2 z-50">
+
+                  <button
+                    onClick={() => navigate("/dashboard")}
+                    className="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 rounded"
+                  >
+                    Dashboard
+                  </button>
+
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left px-3 py-2 text-sm text-red-500 hover:bg-red-50 rounded"
+                  >
+                    Logout
+                  </button>
+
+                </div>
+              )}
+            </div>
           ) : (
-            <Link
-              to="/login"
-              onClick={() => setIsOpen(false)}
-              className="block text-center px-4 py-2 rounded-lg bg-cyan-500 text-black font-semibold"
+            <button
+              onClick={() => navigate("/login")}
+              className="px-4 py-2 bg-cyan-600 text-white rounded-lg"
             >
               Login
-            </Link>
+            </button>
           )}
         </motion.div>
       )}

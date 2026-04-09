@@ -197,7 +197,7 @@ function Hero() {
               </motion.div>
 
               {/* Decorative ring */}
-              <div className="absolute -z-10 -inset-4 rounded-[2.5rem] border-2 border-dashed border-cyan-200/40 animate-[spin_30s_linear_infinite]" />
+              <div className="absolute -z-10 -inset-4 rounded-[2.5rem] border-4 border-dashed border-cyan-200/40 animate-[spin_30s_linear_infinite]" />
             </div>
           </motion.div>
         </div>

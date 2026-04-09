@@ -3,6 +3,9 @@ import Navbar from "./components/layouts/Navbar";
 import Home from "./pages/Home";
 import StationDetails from "./pages/StationDetails";
 import Dashboard from "./pages/Dashboard";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import ProtectedRoute from "./components/common/ProtectedRoute";
 
 export default function App() {
   return (
@@ -11,8 +14,24 @@ export default function App() {
       <main className="pt-2" >
         <Routes>
           <Route path="/" element={<Home />} />
-          <Route path="/stations/:id" element={<StationDetails />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
         </Routes>
       </main>
     </>

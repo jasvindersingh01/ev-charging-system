@@ -5,6 +5,7 @@ import dotenv from "dotenv";
 
 import stationRoutes from "./routes/stationRoutes.js";
 import bookingRoutes from "./routes/bookingRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
 
 dotenv.config();
 
@@ -15,6 +16,7 @@ app.use(express.json());
 
 app.use("/api/stations", stationRoutes);
 app.use("/bookings", bookingRoutes);
+app.use("/api/auth", authRoutes);
 
 app.get("/", (req, res) => {
   res.send("EV Charging Backend Running");

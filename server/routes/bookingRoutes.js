@@ -1,5 +1,6 @@
 import express from "express";
 import Booking from "../models/Booking.js";
+import { protect } from "../middleware/auth.js";
 
 const router = express.Router();
 
@@ -14,7 +15,7 @@ router.post("/", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
-  const bookings = await Booking.find();
+  const bookings = await Booking.find().populate("stationId");
   res.json(bookings);
 });
 
@@ -30,5 +31,32 @@ router.get("/station/:stationId", async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+router.post("/", protect, async (req, res) => {
+  try {
+    const { stationId, timeSlot } = req.body;
+
+    const booking = new Booking({
+      stationId,
+      timeSlot,
+      userId: req.user.id, // 🔥 important
+    });
+
+    await booking.save();
+
+    res.json(booking);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+router.get("/", protect, async (req, res) => {
+  const bookings = await Booking.find({
+    userId: req.user.id,
+  }).populate("stationId");
+
+  res.json(bookings);
+}); 
+
 
 export default router;

@@ -1,11 +1,14 @@
 import mongoose from "mongoose";
 
 const bookingSchema = new mongoose.Schema({
-  userId: String,
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
   stationId: {
-  type: mongoose.Schema.Types.ObjectId,
-  ref: "Station",
-},
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Station",
+  },
   timeSlot: String,
   status: {
     type: String,

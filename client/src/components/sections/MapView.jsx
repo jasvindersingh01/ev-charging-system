@@ -30,7 +30,7 @@ function MapView() {
       .catch((err) => console.log(err));
   }, []);
   return (
-    <div className="h-[500px] w-full rounded-2xl overflow-hidden shadow-lg">
+    <div className="h-[500px] w-full rounded-2xl overflow-hidden shadow-lg z-0">
       <MapContainer
         center={[25.2138, 75.8648]}
         zoom={7}

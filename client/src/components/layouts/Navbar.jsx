@@ -36,7 +36,7 @@ function Navbar() {
   };
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 bg-black/80 backdrop-blur-lg border-b border-white/10">
+    <nav className="fixed top-0 left-0 w-full z-[9999] bg-black/80 backdrop-blur-lg border-b border-white/10">
       <div className="max-w-7xl mx-auto px-5 py-3 flex justify-between items-center">
 
         {/* 🔥 LOGO */}

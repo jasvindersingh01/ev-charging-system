@@ -42,50 +42,60 @@ function MapView() {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
 
-        {stations.map((station) => (
-          <Marker
-            key={station._id}
-            position={[station.lat, station.lng]}
-          >
-         <Popup>
-  <div className="w-56 space-y-2">
+        {stations
+          .filter(
+            (s) =>
+              s.lat !== undefined &&
+              s.lng !== undefined &&
+              s.lat !== null &&
+              s.lng !== null &&
+              s.lat !== "" &&
+              s.lng !== ""
+          )
+          .map((station) => {
+            const lat = Number(station.lat);
+            const lng = Number(station.lng);
 
-    {/* 🔥 Station Name */}
-    <h3 className="text-sm font-semibold text-gray-800">
-      {station.name}
-    </h3>
+            if (isNaN(lat) || isNaN(lng)) return null; // extra safety
 
-    {/* 📍 Location */}
-    <p className="text-xs text-gray-500">
-      📍 {station.location}
-    </p>
+            return (
+              <Marker key={station._id} position={[lat, lng]}>
+                <Popup>
+                  <div className="w-56 space-y-2">
 
-    {/* ⚡ Chargers Info */}
-    <div className="text-xs text-gray-600">
-      ⚡ {station.availableChargers} / {station.totalChargers} available
-    </div>
+                    <h3 className="text-sm font-semibold text-gray-800">
+                      {station.name}
+                    </h3>
 
-    {/* 🟢 Status */}
-    <span className={`inline-block text-xs px-2 py-1 rounded-full ${
-      station.availableChargers > 0
-        ? "bg-green-100 text-green-600"
-        : "bg-red-100 text-red-600"
-    }`}>
-      {station.availableChargers > 0 ? "Available" : "Full"}
-    </span>
+                    <p className="text-xs text-gray-500">
+                      📍 {station.location}
+                    </p>
 
-    {/* 🚀 CTA BUTTON */}
-    <button
-      onClick={() => navigate(`/stations/${station._id}`)}
-      className="w-full mt-2 py-2 text-xs font-medium bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-lg hover:opacity-90 transition"
-    >
-      View & Book ⚡
-    </button>
+                    <div className="text-xs text-gray-600">
+                      ⚡ {station.availableChargers} / {station.totalChargers} available
+                    </div>
 
-  </div>
-</Popup>
-          </Marker>
-        ))}
+                    <span
+                      className={`inline-block text-xs px-2 py-1 rounded-full ${station.availableChargers > 0
+                          ? "bg-green-100 text-green-600"
+                          : "bg-red-100 text-red-600"
+                        }`}
+                    >
+                      {station.availableChargers > 0 ? "Available" : "Full"}
+                    </span>
+
+                    <button
+                      onClick={() => navigate(`/stations/${station._id}`)}
+                      className="w-full mt-2 py-2 text-xs font-medium bg-gradient-to-r from-cyan-600 to-blue-600 text-white rounded-lg hover:opacity-90 transition"
+                    >
+                      View & Book ⚡
+                    </button>
+
+                  </div>
+                </Popup>
+              </Marker>
+            );
+          })}
 
       </MapContainer>
     </div>

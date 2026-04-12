@@ -20,17 +20,26 @@ function StationCard({ station }) {
         <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition bg-gradient-to-br from-cyan-100/40 to-transparent"></div>
 
         {/* 🔝 TOP */}
+        
+
         <div className="flex justify-between items-start mb-3 relative z-10">
+          <div className="h-40 w-full rounded-xl overflow-hidden mb-4">
+          <img
+            src={station.image}
+            alt={station.name}
+            className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+          />
+        </div>
+        
           <h2 className="text-lg font-semibold text-gray-800 group-hover:text-cyan-600 transition">
             {station.name}
           </h2>
 
           <span
-            className={`text-xs px-3 py-1 rounded-full font-medium ${
-              isAvailable
+            className={`text-xs px-3 py-1 rounded-full font-medium ${isAvailable
                 ? "bg-green-100 text-green-600"
                 : "bg-red-100 text-red-600"
-            }`}
+              }`}
           >
             {isAvailable ? "Available" : "Full"}
           </span>
@@ -63,11 +72,10 @@ function StationCard({ station }) {
           {/* Progress */}
           <div className="w-full h-2 bg-gray-200 rounded-full">
             <div
-              className={`h-2 rounded-full ${
-                isAvailable
+              className={`h-2 rounded-full ${isAvailable
                   ? "bg-gradient-to-r from-cyan-500 to-blue-500"
                   : "bg-red-400"
-              }`}
+                }`}
               style={{ width: `${percentage}%` }}
             ></div>
           </div>
@@ -83,11 +91,10 @@ function StationCard({ station }) {
         <div className="mt-4 relative z-10">
           <button
             disabled={!isAvailable}
-            className={`w-full py-2.5 rounded-xl text-sm font-medium shadow-md transition ${
-              isAvailable
+            className={`w-full py-2.5 rounded-xl text-sm font-medium shadow-md transition ${isAvailable
                 ? "bg-gradient-to-r from-cyan-600 to-blue-600 text-white group-hover:scale-[1.02]"
                 : "bg-gray-200 text-gray-400 cursor-not-allowed"
-            }`}
+              }`}
           >
             {isAvailable ? "View Details ⚡" : "No Slots Available"}
           </button>

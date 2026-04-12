@@ -7,6 +7,7 @@ const stationSchema = new mongoose.Schema({
   lng: Number,
   totalChargers: Number,
   availableChargers: Number,
+  image: String,
 });
 
 export default mongoose.model("Station", stationSchema);

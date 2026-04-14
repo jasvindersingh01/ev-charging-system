@@ -12,6 +12,8 @@ function StationDetails() {
   const [showModal, setShowModal] = useState(false);
   const [station, setStation] = useState(null);
   const [bookings, setBookings] = useState([]);
+  const [bookedSlots, setBookedSlots] = useState([]);
+
 
   const timeSlots = [
     "10:00 AM",
@@ -37,11 +39,18 @@ function StationDetails() {
     API.get(`/bookings/station/${id}`)
       .then((res) => {
         setBookings(res.data);
+
+        // 🔥 IMPORTANT
+        const activeBookings = res.data.filter(
+          (b) => b.status !== "cancelled"
+        );
+
+        const slots = activeBookings.map((b) => b.timeSlot);
+
+        setBookedSlots(slots);
       })
       .catch((err) => console.log(err));
   }, [id]);
-
-  const bookedSlots = bookings.map((b) => b.timeSlot);
 
   if (!station) {
     return (
@@ -53,6 +62,24 @@ function StationDetails() {
 
   const percentage =
     (station.availableChargers / station.totalChargers) * 100;
+
+  const fetchBookedSlots = async () => {
+    try {
+      const res = await API.get(`/bookings/station/${station._id}`);
+
+      // sirf active bookings
+      const activeBookings = res.data.filter(
+        (b) => b.status !== "cancelled"
+      );
+
+      const slots = activeBookings.map((b) => b.timeSlot);
+
+      setBookedSlots(slots);
+
+    } catch (err) {
+      console.log(err);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-white via-gray-50 to-cyan-50 pt-28 px-6 py-16">
@@ -225,10 +252,17 @@ function StationDetails() {
                       timeSlot: selectedSlot,
                     });
 
+                    setStation((prev) => ({
+                      ...prev,
+                      availableChargers: prev.availableChargers - 1,
+                    }));
+
                     setBookings((prev) => [...prev, res.data]);
 
-                    setSelectedSlot(null);
+                    setBookedSlots((prev) => [...prev, selectedSlot]);
 
+                    // reset
+                    setSelectedSlot(null);
                     setShowModal(false);
 
                     toast.success("Booking Confirmed ⚡");
@@ -237,9 +271,15 @@ function StationDetails() {
                     toast.error("Booking Failed ❌");
                   }
                 }}
-                className="flex-1 py-2 bg-cyan-600 text-white rounded-lg"
+                disabled={station.availableChargers <= 0}
+                className={`flex-1 py-2 bg-cyan-600 text-white px-6 py-3 rounded-xl ${station.availableChargers > 0
+                  ? "bg-cyan-600 text-white"
+                  : "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  }`}
               >
-                Confirm
+                {station.availableChargers > 0
+                  ? "Book Slot ⚡"
+                  : "Fully Booked"}
               </button>
             </div>
           </motion.div>

@@ -8,8 +8,13 @@ import Register from "./pages/Register";
 import ProtectedRoute from "./components/common/ProtectedRoute";
 import Stations from "./pages/Stations";
 import Admin from "./pages/Admin";
+import { Navigate } from "react-router-dom";
+import AdminRoute from "./routes/AdminRoute";
 
 export default function App() {
+
+  const role = localStorage.getItem("userRole");
+
   return (
     <>
       <Navbar />
@@ -32,10 +37,17 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/admin"
+            element={
+              <AdminRoute>
+                <Admin />
+              </AdminRoute>
+            }
+          />
           <Route path="/stations" element={<Stations />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/admin" element={<Admin />} />
         </Routes>
       </main>
     </>

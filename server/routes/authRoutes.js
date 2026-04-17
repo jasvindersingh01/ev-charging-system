@@ -12,10 +12,13 @@ router.post("/register", async (req, res) => {
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    const role = req.body.email === "admin@gmail.com" ? "admin" : "user";
+
     const user = new User({
       name,
       email,
       password: hashedPassword,
+      role,
     });
 
     await user.save();
@@ -44,7 +47,7 @@ router.post("/login", async (req, res) => {
     }
 
     const token = jwt.sign(
-      { id: user._id, email: user.email },
+      { id: user._id, email: user.email, role: user.role, },
       process.env.JWT_SECRET,
       { expiresIn: "7d" }
     );
@@ -52,6 +55,8 @@ router.post("/login", async (req, res) => {
     res.json({
       token,
       name: user.name,
+      email: user.email,
+      role: user.role,
     });
   } catch (err) {
     console.log(err);

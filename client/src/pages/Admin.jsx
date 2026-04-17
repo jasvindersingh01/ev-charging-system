@@ -4,9 +4,10 @@ import { toast } from "react-toastify";
 import LocationPicker from "../components/sections/LocationPicker";
 import {
   Plus, Pencil, Trash2, Zap, MapPin, X, LayoutDashboard,
-  ImagePlus, ChevronRight, AlertTriangle, Battery
+  ImagePlus, ChevronRight, AlertTriangle, Battery, CalendarDays
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 
 function Admin() {
   const [stations, setStations] = useState([]);
@@ -106,7 +107,6 @@ function Admin() {
     <div className="min-h-screen bg-gray-50 pt-20 pb-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
 
-        {/* ── Header ───────────────────────────────────────── */}
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
             <div className="h-11 w-11 rounded-2xl bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/25">
@@ -118,17 +118,30 @@ function Admin() {
             </div>
           </div>
 
-          <motion.button
-            whileTap={{ scale: 0.97 }}
-            onClick={() => { resetForm(); setShowForm(!showForm); }}
-            className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold shadow-sm transition ${
-              showForm
+          <div className="flex items-center gap-3">
+
+            {/* View Bookings Button */}
+            <Link
+              to="/admin/bookings"
+              className="flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold bg-white border border-gray-200 text-gray-700 hover:border-gray-300 shadow-sm transition"
+            >
+              <CalendarDays size={16} className="text-cyan-600" />
+              All Bookings
+            </Link>
+
+            {/* Add Station Button */}
+            <motion.button
+              whileTap={{ scale: 0.97 }}
+              onClick={() => { resetForm(); setShowForm(!showForm); }}
+              className={`flex items-center gap-2 px-5 py-2.5 rounded-xl text-sm font-semibold shadow-sm transition ${showForm
                 ? "bg-gray-100 text-gray-600 hover:bg-gray-200"
                 : "bg-gradient-to-r from-cyan-600 to-blue-600 text-white shadow-cyan-500/25 hover:opacity-90"
-            }`}
-          >
-            {showForm ? <><X size={16} /> Close</> : <><Plus size={16} /> Add Station</>}
-          </motion.button>
+                }`}
+            >
+              {showForm ? <><X size={16} /> Close</> : <><Plus size={16} /> Add Station</>}
+            </motion.button>
+
+          </div>
         </div>
 
         {/* ── Stats Row ─────────────────────────────────────── */}

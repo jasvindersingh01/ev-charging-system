@@ -1,8 +1,13 @@
 import { motion } from "framer-motion";
-import { Zap, MapPin, BatteryCharging, ArrowRight, ChevronDown } from "lucide-react";
+import { Zap, MapPin, BatteryCharging, ArrowRight, ChevronDown, Shield } from "lucide-react";
 import evImg from "../../assets/ev.avif";
+import { useNavigate } from "react-router-dom";
+
 
 function Hero() {
+
+  const navigate = useNavigate();
+
   const fadeUp = {
     hidden: { opacity: 0, y: 40 },
     visible: (i = 0) => ({
@@ -95,7 +100,9 @@ function Hero() {
               custom={3}
               className="mt-10 flex flex-wrap gap-4"
             >
-              <button className="group relative px-8 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white rounded-2xl font-semibold shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all duration-300 flex items-center gap-2 overflow-hidden">
+              <button
+                onClick={() => navigate("/stations")}
+                className="group relative px-8 py-4 bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white rounded-2xl font-semibold shadow-lg shadow-cyan-500/25 hover:shadow-cyan-500/40 transition-all duration-300 flex items-center gap-2 overflow-hidden">
                 <span className="relative z-10 flex items-center gap-2">
                   Find Stations
                   <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform duration-300" />
@@ -103,7 +110,13 @@ function Hero() {
                 <div className="absolute inset-0 bg-gradient-to-r from-cyan-400 to-blue-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </button>
 
-              <button className="px-8 py-4 border-2 border-gray-200 hover:border-cyan-400 hover:text-cyan-600 rounded-2xl font-semibold transition-all duration-300 hover:shadow-md hover:shadow-cyan-100/50 bg-white/50 backdrop-blur-sm">
+              <button
+              onClick={() => {
+    document
+      .getElementById("how-it-works")
+      ?.scrollIntoView({ behavior: "smooth" });
+  }}
+              className="px-8 py-4 border-2 border-gray-200 hover:border-cyan-400 hover:text-cyan-600 rounded-2xl font-semibold transition-all duration-300 hover:shadow-md hover:shadow-cyan-100/50 bg-white/50 backdrop-blur-sm">
                 Learn More
               </button>
             </motion.div>
@@ -175,6 +188,18 @@ function Hero() {
                     transition={{ delay: 1.5, duration: 1.5, ease: "easeOut" }}
                     className="h-full bg-gradient-to-r from-green-400 to-emerald-500 rounded-full"
                   />
+                </div>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 1.6, duration: 0.6 }}
+                className="absolute -right-2 top-8 z-30 bg-white/95 backdrop-blur-xl border border-gray-100 rounded-2xl px-4 py-3 shadow-xl shadow-gray-200/50"
+              >
+                <div className="flex items-center gap-2">
+                  <Shield size={16} className="text-amber-500" />
+                  <span className="text-xs font-semibold text-gray-800">Verified Station</span>
                 </div>
               </motion.div>
 

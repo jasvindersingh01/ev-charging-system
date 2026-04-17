@@ -3,6 +3,7 @@ import MapView from "../components/sections/MapView";
 import StationCard from "../components/sections/StationCard";
 import { useEffect, useState } from "react";
 import API from "../api/axios";
+import HowItWorks from "../components/sections/HowItWorks";
 
 export default function Home() {
   const [stations, setStations] = useState([]);
@@ -44,6 +45,8 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      <HowItWorks />
     </>
   );
 }

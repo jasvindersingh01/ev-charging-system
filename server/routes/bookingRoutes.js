@@ -2,6 +2,7 @@ import express from "express";
 import Booking from "../models/Booking.js";
 import { protect } from "../middleware/auth.js";
 import Station from "../models/Station.js";
+import { isAdmin } from "../middleware/admin.js";
 
 const router = express.Router();
 
@@ -123,4 +124,17 @@ router.delete("/:id", protect, async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 });
+
+router.get("/admin/all", protect, isAdmin, async (req, res) => {
+  try {
+    const bookings = await Booking.find()
+      .populate("stationId", "name location")
+      .populate("userId", "name email");
+
+    res.json(bookings);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
 export default router;

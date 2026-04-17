@@ -10,6 +10,8 @@ import Stations from "./pages/Stations";
 import Admin from "./pages/Admin";
 import { Navigate } from "react-router-dom";
 import AdminRoute from "./routes/AdminRoute";
+import AdminBookings from "./pages/AdminBooking";
+import Footer from "./components/layouts/Footer";
 
 export default function App() {
 
@@ -45,10 +47,20 @@ export default function App() {
               </AdminRoute>
             }
           />
+          <Route
+            path="/admin/bookings"
+            element={
+              <AdminRoute>
+                <AdminBookings />
+              </AdminRoute>
+            }
+          />
           <Route path="/stations" element={<Stations />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
         </Routes>
+
+        <Footer />
       </main>
     </>
   )
